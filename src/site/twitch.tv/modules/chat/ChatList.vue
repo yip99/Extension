@@ -315,6 +315,26 @@ function onChatMessage(msg: ChatMessage, msgData: Twitch.AnyMessage, shouldRende
 		}
 	}
 
+	if ((msgData as Twitch.ChatMessage).bits) {
+		msg.setHighlight("#BF94FF", "");
+	}
+
+	if (msg.badges.partner) {
+		msg.setHighlight("#9146FF", "Partner");
+	}
+
+	if (msg.badges.moderator) {
+		msg.setHighlight("#00AD03", "Moderator");
+	}
+
+	if (msg.badges.vip) {
+		msg.setHighlight("#E005B9", "VIP");
+	}
+
+	if (msg.badges.broadcaster) {
+		msg.setHighlight("#E91916", "Broadcaster");
+	}
+
 	// message is sent by the current user
 	if (msgData.nonce) {
 		msg.setDeliveryState("IN_FLIGHT");
