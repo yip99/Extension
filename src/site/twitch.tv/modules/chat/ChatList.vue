@@ -214,7 +214,7 @@ function onChatMessage(msg: ChatMessage, msgData: Twitch.AnyMessage, shouldRende
 
 		// assign highlight
 		if (msgData.isFirstMsg && showFirstTimeChatter.value) {
-			msg.setHighlight("#c832c8", "First Message");
+			msg.setHighlight("var(--color-text-base)", "First Message");
 		}
 
 		if (msg.author) {
