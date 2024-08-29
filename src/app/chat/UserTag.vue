@@ -13,7 +13,14 @@
 				type="twitch"
 				@click="handleClick($event)"
 			/>
-			<Badge v-for="badge of activeBadges" :key="badge.id" :badge="badge" :alt="badge.data.tooltip" type="app" />
+			<Badge
+				v-for="badge of activeBadges"
+				:key="badge.id"
+				:badge="badge"
+				:alt="badge.data.tooltip"
+				type="app"
+				:style="badge.provider === '7TV' ? { display: 'none' } : {}"
+			/>
 		</span>
 
 		<!-- Message Author -->
