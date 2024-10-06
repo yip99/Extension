@@ -19,29 +19,6 @@ import { loadSite } from "./site.normal";
 		host_manifest: manifest ?? null,
 	};
 
-	if (!manifest || hostedVersion <= localVersion) {
-		log.info("<Site>", "Using Local Mode,", "v" + import.meta.env.VITE_APP_VERSION);
-		loadSite();
-	} else {
-		seventv.hosted = true;
-
-		const v1 = document.createElement("script");
-		v1.id = "seventv-site-hosted";
-		v1.src = manifest.index_file;
-		v1.type = "module";
-
-		const v2 = document.createElement("link");
-		v2.rel = "stylesheet";
-		v2.type = "text/css";
-		v2.href = manifest.stylesheet_file;
-		v2.setAttribute("charset", "utf-8");
-		v2.setAttribute("content", "text/html");
-		v2.setAttribute("http-equiv", "content-type");
-		v2.id = "seventv-stylesheet";
-
-		document.head.appendChild(v2);
-		document.head.appendChild(v1);
-
-		log.info("<Site>", "Using Hosted Mode,", "v" + manifest.version);
-	}
+	log.info("<Site>", "Using Local Mode,", "v" + import.meta.env.VITE_APP_VERSION);
+	loadSite();
 })();
