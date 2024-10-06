@@ -151,7 +151,7 @@ const onMessage = (msgData: Twitch.AnyMessage): boolean => {
 function onChatMessage(msg: ChatMessage, msgData: Twitch.AnyMessage, shouldRender = true) {
 	const c = getMessageComponent(msgData.type);
 	let highlightColor = "";
-	const highlightText = [];
+	let highlightText = "";
 	if (c) {
 		msg.setComponent(c, { msgData: msgData });
 	}
@@ -162,7 +162,7 @@ function onChatMessage(msg: ChatMessage, msgData: Twitch.AnyMessage, shouldRende
 
 	if (msgData.type === MessageType.RESTRICTED_LOW_TRUST_USER_MESSAGE && showRestrictedLowTrustUser.value) {
 		highlightColor = "#ff7d00";
-		highlightText.push("Restricted Suspicious User");
+		highlightText = "Restricted Suspicious User";
 	}
 
 	// define message author
@@ -200,7 +200,7 @@ function onChatMessage(msg: ChatMessage, msgData: Twitch.AnyMessage, shouldRende
 			}
 
 			highlightColor = "#9488855A";
-			highlightText.push("You Blocked This User");
+			highlightText = "You Blocked This User";
 		}
 
 		if (identity.value && msg.author && msg.author.id === identity.value.id) {
@@ -219,7 +219,6 @@ function onChatMessage(msg: ChatMessage, msgData: Twitch.AnyMessage, shouldRende
 		// assign highlight
 		if (msgData.isFirstMsg && showFirstTimeChatter.value) {
 			highlightColor = "var(--color-text-base)";
-			highlightText.push("First Message");
 		}
 
 		if (msg.author) {
@@ -227,7 +226,7 @@ function onChatMessage(msg: ChatMessage, msgData: Twitch.AnyMessage, shouldRende
 
 			if (lowTrust && lowTrust.treatment.type === "ACTIVE_MONITORING" && showMonitoredLowTrustUser.value) {
 				highlightColor = "#ff7d00";
-				highlightText.push("Monitored Suspicious User");
+				highlightText = "Monitored Suspicious User";
 			}
 		}
 
@@ -322,31 +321,37 @@ function onChatMessage(msg: ChatMessage, msgData: Twitch.AnyMessage, shouldRende
 	}
 
 	if ((msgData as Twitch.ChatMessage).bits) {
-		msg.setHighlight("#BF94FF", "");
+		highlightColor = "#BF94FF";
+		highlightText = "";
 	}
 
 	if (msg.badges.partner) {
 		highlightColor = "#9146FF";
-		highlightText.push("Partner");
+		highlightText = "Partner";
 	}
 
 	if (msg.badges.moderator) {
 		highlightColor = "#00AD03";
-		highlightText.push("Moderator");
+		highlightText = "Moderator";
 	}
 
 	if (msg.badges.vip) {
 		highlightColor = "#E005B9";
-		highlightText.push("VIP");
+		highlightText = "VIP";
 	}
 
 	if (msg.badges.broadcaster) {
 		highlightColor = "#E91916";
-		highlightText.push("Broadcaster");
+		highlightText = "Broadcaster";
 	}
-	if (highlightText.length > 0) {
-		msg.setHighlight(highlightColor, highlightText.join(" • "));
+
+	if (msg.first || highlightText.length) {
+		msg.setHighlight(
+			highlightColor,
+			`${msg.first ? "First Message" : ""} ${msg.first && highlightText.length ? "•" : ""} ${highlightText}`,
+		);
 	}
+
 	// message is sent by the current user
 	if (msgData.nonce) {
 		msg.setDeliveryState("IN_FLIGHT");
